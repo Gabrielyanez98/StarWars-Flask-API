@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User
+from models import db, User, Favorite, Planets, Characters
 #from models import Person
 
 app = Flask(__name__)
@@ -36,6 +36,9 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
+
+# --- ENDPOINTS ---
+
 @app.route('/user', methods=['GET'])
 def handle_hello():
 
@@ -44,6 +47,47 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
+
+@app.route('/planets', methods=['GET'])
+def handle_planets():
+
+    planets_query = Planets.query.all()
+    results = list(map(lambda item: item.serialize(),planets_query))
+    print(results)
+
+    return jsonify(results), 200
+
+@app.route('/planets/<int:planet_id>', methods=['GET'])
+def get_one_planet(planet_id):
+
+    planet_query = Planets.query.filter_by(id=planet_id).first()
+    print(planet_query.serialize())
+
+    return jsonify(planet_query.serialize()), 200
+
+@app.route('/characters', methods=['GET'])
+def handle_characters():
+
+    characters_query = Characters.query.all()
+    results = list(map(lambda item: item.serialize(),characters_query))
+    print(results)
+
+    return jsonify(results), 200
+
+@app.route('/characters/<int:character_id>', methods=['GET'])
+def get_one_character(character_id):
+
+    character_query = Characters.query.filter_by(id=character_id).first()
+    print(character_query.serialize())
+
+    return jsonify(character_query.serialize()), 200
+
+    
+
+    
+
+# --- /ENDPOINTS ---
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
