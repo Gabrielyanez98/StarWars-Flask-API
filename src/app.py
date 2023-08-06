@@ -89,14 +89,14 @@ def get_one_character(character_id):
 
 #Get all favorites
 
-@app.route('/favorites', methods=['GET'])
+@app.route('user/favorites', methods=['GET'])
 def handle_favorites():
-
-    favorites_query = Favorite.query.all()
-    results = list(map(lambda item: item.serialize(),favorites_query))
-    print(results)
-
-    return jsonify(results), 200
+          
+        favorites_query = Favorite.query.all()
+        results = list(map(lambda item: item.serialize(),favorites_query))
+        print(results)
+    
+        return jsonify(results), 200
 
 #Add new favorite planet
 @app.route('/favorites/planets', methods=['POST'])
